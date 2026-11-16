@@ -1,0 +1,54 @@
+@page
+@model EncryptionWeb.Pages.IndexModel
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Шифрование текста</title>
+</head>
+<body>
+    <h1>Шифрование текста</h1>
+
+    <form method="post">
+        <p><label asp-for="Text">Текст:</label></p>
+        <textarea asp-for="Text" rows="6" cols="60"></textarea>
+
+        <p>
+            <label asp-for="Algorithm">Алгоритм:</label>
+            <select asp-for="Algorithm">
+                <option value="AES">AES</option>
+                <option value="RSA">RSA</option>
+            </select>
+        </p>
+
+        <p>Ключи создаются автоматически при каждом шифровании.</p>
+        <p>RSA: не более 190 байт UTF-8; буква кириллицы обычно занимает 2 байта.</p>
+        <button type="submit">Зашифровать и проверить дешифрование</button>
+    </form>
+
+    @if (Model.Error != null)
+    {
+        <p>@Model.Error</p>
+    }
+
+    @if (Model.Result != null)
+    {
+        <h2>Зашифрованный текст (Base64)</h2>
+        <textarea rows="6" cols="60" readonly>@Model.Result.EncryptedText</textarea>
+
+        <h2>Результат дешифрования</h2>
+        <textarea rows="6" cols="60" readonly>@Model.Result.DecryptedText</textarea>
+
+        @if (Model.Result.DecryptedText == Model.Text)
+        {
+            <p>Проверка пройдена: текст совпадает с исходным.</p>
+        }
+        else
+        {
+            <p>Проверка не пройдена: текст отличается от исходного.</p>
+        }
+    }
+</body>
+</html>
